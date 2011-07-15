@@ -17,59 +17,22 @@
 
 import pygame, sys, os
 from pygame.locals import *
-
-def loadImage(name):
-    fullname = os.path.join('data', name)
-    try:
-        image = pygame.image.load(fullname)
-    except pygame.error, message:
-        print("Cannot load image: %s" % name)
-        raise SystemExit, message
-    return image
-
-def loadSound(name):
-    fullname = os.path.join('data', name)
-    try:
-        sound = pygame.mixer.Sound(fullname)
-    except pygame.error, message:
-        print("Cannot load sound: %s" % name)
-        raise SystemExit, message
-    return sound
-
-class Asteroid():
-    def __init__(self):
-        self.rect = pygame.Surface((24,24))
-        self.rect = self.rect.convert()
-        self.rect.fill((250, 250, 250))
-
-class Alien():
-    def __init__(self):
-        self.rect = pygame.Surface((48,48))
-        self.rect = self.rect.convert()
-        self.rect.fill((250, 250, 250))
-
-class Ship():
-    def __init__(self):
-        self.image = loadImage("spaceship.bmp")
-        self.position = (320, 432)
-        
-    def moveLeft(self):
-        self.position = (self.position[0] - 10, self.position[1])
-       
-    def moveRight(self):
-        self.position = (self.position[0] + 10, self.position[1])
+from utils import *
+from objects import *
 
 class AlienInvasion():
     def __init__(self):
-        pygame.init()
-        self.spaceShip = Ship()
+        pygame.display.init()
+        pygame.mixer.init()
+        pygame.font.init()
         self.window = pygame.display.set_mode((640, 480))
-        pygame.display.set_caption("Alien Invasion: 2150")
+        pygame.display.set_caption("Alien Invasion: 2150 (Alpha)")
         
+        self.spaceShip = Ship()
         self.draw()
         
         font = pygame.font.Font(None, 36)
-        self.text = font.render("Alien Invasion: 2150", 1, (10, 10, 10))
+        self.text = font.render("Alien Invasion: 2150 (Alpha)", 1, (10, 10, 10))
         textpos = self.text.get_rect()
         textpos.centerx = self.screen.get_rect().centerx
         textpos.centery = self.screen.get_rect().centery
@@ -82,7 +45,9 @@ class AlienInvasion():
         
     def draw(self):
         self.screen = pygame.display.get_surface()
-        self.screen.blit(loadImage("background.bmp"), (0, 0))
+        self.background = loadImage("background.bmp")
+        self.background = self.background.convert()
+        self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.spaceShip.image, self.spaceShip.position)
         
     def eventInput(self, events):
