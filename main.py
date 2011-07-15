@@ -36,19 +36,24 @@ def loadSound(name):
         raise SystemExit, message
     return sound
 
-class EnemyShip(pygame.sprite.Sprite):
+class Asteroid(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.rect = loadImage("enemyship.bmp")
+        self.rect = pygame.Surface((24,24))
+        self.rect = self.rect.convert()
+        self.rect.fill((250, 250, 250))
 
-class Ship(pygame.sprite.Sprite):
+class Alien(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
+        self.rect = pygame.Surface((48,48))
+        self.rect = self.rect.convert()
+        self.rect.fill((250, 250, 250))
+
+class Ship():
+    def __init__(self):
         self.image = loadImage("spaceship.bmp")
         self.position = (320, 432)
-        
-    def getSurface(self):
-        return self.image
         
     def moveLeft(self):
        self.position = (self.position[0] - 10, self.position[1])
@@ -65,6 +70,12 @@ class AlienInvasion():
         pygame.display.set_caption("Alien Invasion: 2150")
         self.screen = pygame.display.get_surface()
         self.screen.blit(loadImage("background.bmp"), (0, 0))
+        font = pygame.font.Font(None, 36)
+        self.text = font.render("Alien Invasion: 2150", 1, (10, 10, 10))
+        textpos = self.text.get_rect()
+        textpos.centerx = self.screen.get_rect().centerx
+        textpos.centery = self.screen.get_rect().centery
+        self.screen.blit(self.text, textpos)
         self.screen.blit(self.spaceShip.image, self.spaceShip.position)
 
         pygame.display.flip()
