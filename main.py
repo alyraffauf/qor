@@ -36,49 +36,52 @@ def loadSound(name):
         raise SystemExit, message
     return sound
 
-
 class EnemyShip(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = loadImage("enemyship.bmp")
-        self.punching = 0
+        self.rect = loadImage("enemyship.bmp")
+
+class Ship(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = loadImage("spaceship.bmp")
+        self.position = (320, 432)
+        
+    def getSurface(self):
+        return self.image
+        
+    def moveLeft(self):
+       self.position = (self.position[0] - 10, self.position[1])
+       
+    def moveRight(self):
+       self.position = (self.position[0] + 10, self.position[1])
 
 class AlienInvasion():
     def __init__(self):
         pygame.init()
         self.sound = loadSound("drill_down.ogg")
-        self.shipSurface = loadImage("spaceship.bmp")
+        self.spaceShip = Ship()
         self.window = pygame.display.set_mode((640, 480))
         pygame.display.set_caption("Alien Invasion: 2150")
         self.screen = pygame.display.get_surface()
-        
         self.screen.blit(loadImage("background.bmp"), (0, 0))
-
-        pygame.display.flip()
-        self.shipPosition = (320, 432)
-        self.screen.blit(self.shipSurface, self.shipPosition)
+        self.screen.blit(self.spaceShip.image, self.spaceShip.position)
 
         pygame.display.flip()
         self.sound.play()
-
-    def moveRight(self):
-       self.shipPosition = (self.shipPosition[0] + 10, self.shipPosition[1])
-       self.screen.blit(self.shipSurface, self.shipPosition)
-       pygame.display.flip()
-
-    def moveLeft(self):
-       self.shipPosition = (self.shipPosition[0] - 10, self.shipPosition[1])
-       self.screen.blit(self.shipSurface, self.shipPosition)
-       pygame.display.flip()
 
     def eventInput(self, events):
         for event in events: 
             if event.type == QUIT: 
                 sys.exit(0)
             elif event.type == 2 and event.key == 275:
-                self.moveRight()
+                self.spaceShip.moveRight()
+                self.screen.blit(self.spaceShip.image, self.spaceShip.position)
+                pygame.display.flip()
             elif event.type == 2 and event.key == 276:
-                self.moveLeft()
+                self.spaceShip.moveLeft()
+                self.screen.blit(self.spaceShip.image, self.spaceShip.position)
+                pygame.display.flip()
             else: 
                 print(event)
 
