@@ -36,16 +36,14 @@ def loadSound(name):
         raise SystemExit, message
     return sound
 
-class Asteroid(pygame.sprite.Sprite):
+class Asteroid():
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
         self.rect = pygame.Surface((24,24))
         self.rect = self.rect.convert()
         self.rect.fill((250, 250, 250))
 
-class Alien(pygame.sprite.Sprite):
+class Alien():
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
         self.rect = pygame.Surface((48,48))
         self.rect = self.rect.convert()
         self.rect.fill((250, 250, 250))
@@ -56,47 +54,55 @@ class Ship():
         self.position = (320, 432)
         
     def moveLeft(self):
-       self.position = (self.position[0] - 10, self.position[1])
+        self.position = (self.position[0] - 10, self.position[1])
        
     def moveRight(self):
-       self.position = (self.position[0] + 10, self.position[1])
+        self.position = (self.position[0] + 10, self.position[1])
 
 class AlienInvasion():
     def __init__(self):
         pygame.init()
-        self.sound = loadSound("drill_down.ogg")
         self.spaceShip = Ship()
         self.window = pygame.display.set_mode((640, 480))
         pygame.display.set_caption("Alien Invasion: 2150")
-        self.screen = pygame.display.get_surface()
-        self.screen.blit(loadImage("background.bmp"), (0, 0))
+        
+        self.draw()
+        
         font = pygame.font.Font(None, 36)
         self.text = font.render("Alien Invasion: 2150", 1, (10, 10, 10))
         textpos = self.text.get_rect()
         textpos.centerx = self.screen.get_rect().centerx
         textpos.centery = self.screen.get_rect().centery
         self.screen.blit(self.text, textpos)
-        self.screen.blit(self.spaceShip.image, self.spaceShip.position)
 
-        pygame.display.flip()
+        self.sound = loadSound("drill_down.ogg")
         self.sound.play()
-
+        
+        pygame.display.flip()
+        
+    def draw(self):
+        self.screen = pygame.display.get_surface()
+        self.screen.blit(loadImage("background.bmp"), (0, 0))
+        self.screen.blit(self.spaceShip.image, self.spaceShip.position)
+        
     def eventInput(self, events):
         for event in events: 
             if event.type == QUIT: 
                 sys.exit(0)
             elif event.type == 2 and event.key == 275:
                 self.spaceShip.moveRight()
-                self.screen.blit(self.spaceShip.image, self.spaceShip.position)
-                pygame.display.flip()
+                self.draw()
+                pygame.display.update()
             elif event.type == 2 and event.key == 276:
                 self.spaceShip.moveLeft()
-                self.screen.blit(self.spaceShip.image, self.spaceShip.position)
-                pygame.display.flip()
+                self.draw()
+                pygame.display.update()
             else: 
                 print(event)
 
 if __name__ == '__main__':
     alienInvasion = AlienInvasion()
     while True:
+        clock = pygame.time.Clock()
+        clock.tick(60)
         alienInvasion.eventInput(pygame.event.get())
