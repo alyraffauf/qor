@@ -19,49 +19,57 @@ import pygame, sys, os
 from pygame.locals import *
 from utils import *
 from objects import *
+from player import *
 
 class AlienInvasion():
     def __init__(self):
+        self.playlist = ['spaceInvadersByPornophonique.ogg', 'drillDownBySeveredFifth.ogg']
+        self.player = Player(self.playlist)
         pygame.display.init()
-        pygame.mixer.init()
         pygame.font.init()
         self.window = pygame.display.set_mode((640, 480))
-        pygame.display.set_caption("Alien Invasion: 2150 (Alpha)")
-        
-        self.spaceShip = Ship()
-        self.draw()
-        
-        font = pygame.font.Font(None, 36)
-        self.text = font.render("Alien Invasion: 2150 (Alpha)", 1, (10, 10, 10))
-        textpos = self.text.get_rect()
-        textpos.centerx = self.screen.get_rect().centerx
-        textpos.centery = self.screen.get_rect().centery
-        self.screen.blit(self.text, textpos)
+        self.screen = pygame.display.get_surface()
 
-        self.sound = loadSound("drill_down.ogg")
-        self.sound.play()
+        pygame.display.set_caption("Alien Invasion: 2150 (Alpha)")
+
+        self.background = loadImage("background.bmp")
+        self.background.convert()
+
+        self.spaceShip = Ship()
+        self.font = pygame.font.Font(None, 36)
         
-        pygame.display.flip()
+        self.text = self.font.render("Alien Invasion: 2150 (Alpha)", 1, (10, 10, 10))
+        self.textpos = self.text.get_rect()
+        self.textpos.centerx = self.screen.get_rect().centerx
+        self.textpos.centery = self.screen.get_rect().centery
+        
+        self.player.play()
         
     def draw(self):
         self.screen = pygame.display.get_surface()
-        self.background = loadImage("background.bmp")
-        self.background = self.background.convert()
         self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.text, self.textpos)
         self.screen.blit(self.spaceShip.image, self.spaceShip.position)
-        
+
+        pygame.display.update()
+
+
+    def show(self):
+        self.eventInput(pygame.event.get())
+        self.spaceShip.update()
+        self.draw()
+        self.player.update()
+
     def eventInput(self, events):
         for event in events: 
             if event.type == QUIT: 
                 sys.exit(0)
-            elif event.type == 2 and event.key == 275:
+            elif event.type == KEYDOWN and event.key == K_LEFT:
                 self.spaceShip.moveRight()
-                self.draw()
-                pygame.display.update()
-            elif event.type == 2 and event.key == 276:
+            elif event.type == KEYDOWN and event.key == K_RIGHT:
                 self.spaceShip.moveLeft()
-                self.draw()
-                pygame.display.update()
+            elif event.type == KEYUP and (event.key == K_LEFT or event.key == K_RIGHT):
+                self.spaceShip.stop()
             else: 
                 print(event)
 
@@ -70,4 +78,4 @@ if __name__ == '__main__':
     while True:
         clock = pygame.time.Clock()
         clock.tick(60)
-        alienInvasion.eventInput(pygame.event.get())
+        alienInvasion.show()

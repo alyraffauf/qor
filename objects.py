@@ -35,9 +35,16 @@ class Ship():
         self.image = loadImage("spaceship.bmp")
         #self.image = self.image.convert()
         self.position = (320, 432)
+        self.xSpeed = 0
         
     def moveLeft(self):
-        self.position = (self.position[0] - 10, self.position[1])
+        self.xSpeed = 10
        
     def moveRight(self):
-        self.position = (self.position[0] + 10, self.position[1])
+        self.xSpeed = -10
+
+    def stop(self):
+        self.xSpeed = 0
+
+    def update(self):
+        self.position = (self.position[0] + self.xSpeed, self.position[1])
