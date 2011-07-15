@@ -1,4 +1,11 @@
-Artwork is released under the CC Creative Commons Attribution Share-Alike license unless otherwise stated.
-Alien Invaders: 2150 is released under the General Public License 3. See GPL3.txt for more details.
+Multimedia is released under the CC Attribution Share-Alike License.
+spaceInvadersByPornophonique.ogg is released under the CC BY-NC-SA
+Alien Invaders: 2150 is released under the General Public License 3. 
+See GPL3.txt for more details.
 
-Requires pygame.
+Requirements:
+* python 2.7+
+* pygame
+
+
+Alien Invaders: 2150 is a 2D shooter inspired by Space Invaders.
