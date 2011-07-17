@@ -9,11 +9,11 @@
 
 # Alien Invasion: 2150 is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pygame, sys, os
 from pygame.locals import *
@@ -42,11 +42,8 @@ class AlienInvasion():
         self.textpos = self.text.get_rect()
         self.textpos.centerx = self.screen.get_rect().centerx
         self.textpos.centery = self.screen.get_rect().centery
-        self.a1 = Asteroid()
-        self.a1.image = loadImage("asteroid.png")
-        self.a2 = Asteroid()
-        self.a2.image = loadImage("asteroid.png")
 
+        self.asteroid = Asteroid()
         self.player.play()
         
     def draw(self):
@@ -54,22 +51,21 @@ class AlienInvasion():
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.text, self.textpos)
         self.screen.blit(self.spaceShip.image, self.spaceShip.position)
-        self.screen.blit(self.a1.image, self.a1.position)
-        self.screen.blit(self.a2.image, self.a2.position)
+        self.screen.blit(self.asteroid.image, self.asteroid.position)
+
         pygame.display.update()
 
 
     def show(self):
         self.eventInput(pygame.event.get())
         self.spaceShip.update()
-        self.a1.update()
-        self.a2.update()
+        self.asteroid.update()
         self.draw()
         self.player.update()
 
     def eventInput(self, events):
-        for event in events:
-            if event.type == QUIT:
+        for event in events: 
+            if event.type == QUIT: 
                 sys.exit(0)
             elif event.type == KEYDOWN and event.key == K_LEFT:
                 self.spaceShip.moveRight()
@@ -77,7 +73,7 @@ class AlienInvasion():
                 self.spaceShip.moveLeft()
             elif event.type == KEYUP and (event.key == K_LEFT or event.key == K_RIGHT):
                 self.spaceShip.stop()
-            else:
+            else: 
                 print(event)
 
 if __name__ == '__main__':

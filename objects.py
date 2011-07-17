@@ -18,14 +18,15 @@ import pygame, sys, os, random
 from pygame.locals import *
 from utils import *
 
+random.seed()
+
 class Asteroid():
     def __init__(self):
-        self.objectType = "Asteroid"
         self.rect = pygame.Surface((24,24))
         self.rect = self.rect.convert()
         self.rect.fill((250, 250, 250))
         self.image = loadImage("asteroid.png")
-        self.position = ((random.randrange(0, 640 - 24)), -24)
+        self.position = (random.randrange(0, 640 - 24), -24)
         self.yspeed = 5
 
     def update(self):
