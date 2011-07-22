@@ -19,7 +19,7 @@ import os
 from pygame.locals import *
 
 def loadImage(name):
-    fullname = os.path.join('data', name)
+    fullname = os.path.join('../../share/alieninvasion/', name)
     try:
         image = pygame.image.load(fullname)
     except pygame.error, message:
@@ -28,7 +28,7 @@ def loadImage(name):
     return image
 
 def loadSound(name):
-    fullname = os.path.join('data', name)
+    fullname = os.path.join('../../share/alieninvasion/', name)
     try:
         sound = pygame.mixer.Sound(fullname)
     except pygame.error, message:
