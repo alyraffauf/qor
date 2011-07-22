@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Alien Invasion: 2150 - a game inspired by Space Invaders
 # Copyright (C) 2011 Thomas Chace <ithomashc@gmail.com>
 
@@ -14,26 +15,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pygame
+import sys
 import os
-from pygame.locals import *
+import pygame
 
-def loadImage(name):
-    fullname = os.path.join('../../share/alieninvasion/', name)
-    fullname = os.path.realpath(fullname)
-    try:
-        image = pygame.image.load(fullname)
-    except pygame.error, message:
-        print("Cannot load image: %s" % name)
-        raise SystemExit, message
-    return image
+newPath = os.path.realpath(__file__ + "/../../lib/alieninvasion")
+os.chdir(newPath)
+sys.path.insert(0, newPath)
 
-def loadSound(name):
-    fullname = os.path.join('../../share/alieninvasion/', name)
-    fullname = os.path.realpath(fullname)
-    try:
-        sound = pygame.mixer.Sound(fullname)
-    except pygame.error, message:
-        print("Cannot load sound: %s" % name)
-        raise SystemExit, message
-    return sound
+import alieninvasion
+
+game = alieninvasion.AlienInvasion()
+
+while True:
+    clock = pygame.time.Clock()
+    clock.tick(60)
+    game.show()

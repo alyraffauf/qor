@@ -23,6 +23,7 @@ from utils import *
 from objects import *
 from player import *
 
+
 class AlienInvasion():
     def __init__(self):
         self.playlist = ['audio/spaceInvadersByPornophonique.ogg',
