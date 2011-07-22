@@ -15,7 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pygame, sys, os
+import pygame
+import sys
+import os
 from pygame.locals import *
 from utils import *
 from objects import *
@@ -23,7 +25,8 @@ from player import *
 
 class AlienInvasion():
     def __init__(self):
-        self.playlist = ['spaceInvadersByPornophonique.ogg', 'drillDownBySeveredFifth.ogg']
+        self.playlist = ['audio/spaceInvadersByPornophonique.ogg',
+            'audio/drillDownBySeveredFifth.ogg']
         self.player = Player(self.playlist)
         pygame.display.init()
         pygame.font.init()
@@ -32,13 +35,14 @@ class AlienInvasion():
 
         pygame.display.set_caption("Alien Invasion: 2150 (Alpha)")
 
-        self.background = loadImage("background.bmp")
+        self.background = loadImage("images/background.png")
         self.background.convert()
 
         self.spaceShip = Ship()
         self.font = pygame.font.Font(None, 36)
         
-        self.text = self.font.render("Alien Invasion: 2150 (Alpha)", 1, (10, 10, 10))
+        self.text = self.font.render("Alien Invasion: 2150 (Alpha)", 
+            1, (10, 10, 10))
         self.textpos = self.text.get_rect()
         self.textpos.centerx = self.screen.get_rect().centerx
         self.textpos.centery = self.screen.get_rect().centery

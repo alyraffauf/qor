@@ -14,7 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pygame, sys, os, random
+import pygame
+import random
 from pygame.locals import *
 from utils import *
 
@@ -25,7 +26,7 @@ class Asteroid():
         self.rect = pygame.Surface((24,24))
         self.rect = self.rect.convert()
         self.rect.fill((250, 250, 250))
-        self.image = loadImage("asteroid.png")
+        self.image = loadImage("images/asteroid.png")
         self.position = (random.randrange(0, 640 - 24), -24)
         self.yspeed = 5
 
@@ -40,7 +41,7 @@ class Alien():
 
 class Ship():
     def __init__(self):
-        self.image = loadImage("spaceship.bmp")
+        self.image = loadImage("images/spaceship.png")
         #self.image = self.image.convert()
         self.position = (320, 432)
         self.xSpeed = 0

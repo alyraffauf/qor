@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pygame, sys, os
+import pygame
 from pygame.locals import *
 from utils import *
 from objects import *

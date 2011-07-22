@@ -14,7 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pygame, sys, os
+import pygame
+import os
 from pygame.locals import *
 
 def loadImage(name):
