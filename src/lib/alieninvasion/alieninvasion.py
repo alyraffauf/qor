@@ -18,6 +18,7 @@
 import pygame
 import sys
 import os
+import time
 from pygame.locals import *
 from utils import *
 from objects import *
@@ -35,8 +36,11 @@ class AlienInvasion():
         self.screen = pygame.display.get_surface()
 
         pygame.display.set_caption("Alien Invasion: 2150 (Alpha)")
+        
+        fullname = os.path.join('../../share/alieninvasion/images', "background.png")
+        fullname = os.path.realpath(fullname)
 
-        self.background = loadImage("images/background.png")
+        self.background = pygame.image.load(fullname)
         self.background.convert()
 
         self.spaceShip = Ship()
@@ -48,15 +52,28 @@ class AlienInvasion():
         self.textpos.centerx = self.screen.get_rect().centerx
         self.textpos.centery = self.screen.get_rect().centery
 
-        self.asteroid = Asteroid()
         self.player.play()
+        self.missles = []
+        self.asteroids = []
+        num_ast = 0
+        while True:
+            if num_ast < 5:
+                self.asteroids.append(Asteroid())
+                num_ast = num_ast + 1
+            else:
+                break
+        #self.asteroid = Asteroid()
         
     def draw(self):
         self.screen = pygame.display.get_surface()
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.text, self.textpos)
         self.screen.blit(self.spaceShip.image, self.spaceShip.position)
-        self.screen.blit(self.asteroid.image, self.asteroid.position)
+        for asteroid in self.asteroids:
+            self.screen.blit(asteroid.image[0], asteroid.position)
+
+        for missle in self.missles:
+            self.screen.blit(missle.image[0], missle.position)
 
         pygame.display.update()
 
@@ -64,7 +81,11 @@ class AlienInvasion():
     def show(self):
         self.eventInput(pygame.event.get())
         self.spaceShip.update()
-        self.asteroid.update()
+        for asteroid in self.asteroids:
+            asteroid.update()
+            
+        for missle in self.missles:
+            missle.update()
         self.draw()
         self.player.update()
 
@@ -78,6 +99,12 @@ class AlienInvasion():
                 self.spaceShip.moveLeft()
             elif event.type == KEYUP and (event.key == K_LEFT or event.key == K_RIGHT):
                 self.spaceShip.stop()
+            elif event.type == KEYUP and event.key == K_SPACE:
+                self.spaceShip.shoot()
+                
+                missle = Missle()
+                missle.position = self.spaceShip.position
+                self.missles.append(missle)
             else: 
                 print(event)
 

@@ -27,7 +27,7 @@ class Player():
 
     def play(self):
         self.song = self.playlist[0]
-        self.sound = loadSound(self.song)
+        self.sound = load_sound(self.song)
         self.sound.play()
         self.update()     
           

@@ -17,18 +17,23 @@
 import pygame
 import os
 from pygame.locals import *
-
-def loadImage(name):
+    
+def load_image(name, colorkey=None):
     fullname = os.path.join('../../share/alieninvasion/', name)
     fullname = os.path.realpath(fullname)
     try:
         image = pygame.image.load(fullname)
     except pygame.error, message:
-        print("Cannot load image: %s" % name)
+        print 'Cannot load image:', fullname
         raise SystemExit, message
-    return image
+    image = image.convert()
+    if colorkey is not None:
+        if colorkey is -1:
+            colorkey = image.get_at((0,0))
+        image.set_colorkey(colorkey, RLEACCEL)
+    return image, image.get_rect()
 
-def loadSound(name):
+def load_sound(name):
     fullname = os.path.join('../../share/alieninvasion/', name)
     fullname = os.path.realpath(fullname)
     try:

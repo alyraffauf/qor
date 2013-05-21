@@ -19,6 +19,11 @@ import random
 from pygame.locals import *
 from utils import *
 
+import os, sys
+
+if not pygame.font: print 'Warning, fonts disabled'
+if not pygame.mixer: print 'Warning, sound disabled'
+
 random.seed()
 
 class Asteroid():
@@ -26,25 +31,45 @@ class Asteroid():
         self.rect = pygame.Surface((24,24))
         self.rect = self.rect.convert()
         self.rect.fill((250, 250, 250))
-        self.image = loadImage("images/asteroid.png")
+        self.image = load_image("images/asteroid.png")
         self.position = (random.randrange(0, 640 - 24), -24)
+        self.xspeed = random.randrange(-1,1)
         self.yspeed = 5
 
     def update(self):
-        self.position = (self.position[0], self.position[1] + self.yspeed)
+        self.position = (self.position[0] + self.xspeed, self.position[1] + self.yspeed)
 
 class Alien():
     def __init__(self):
         self.rect = pygame.Surface((48,48))
         self.rect = self.rect.convert()
         self.rect.fill((250, 250, 250))
-
-class Ship():
+        
+class Missle(pygame.sprite.Sprite):
     def __init__(self):
-        self.image = loadImage("images/spaceship.png")
+        pygame.sprite.Sprite.__init__(self) 
+        self.image, self.rect = load_image("images/spaceship.png", -1)
+        self.image = load_image("images/asteroid.png")
+        self.position = (320, 432)#(random.randrange(0, 640 - 24), -24)
+        self.xspeed = 0#random.randrange(-1,1)
+        self.yspeed = -8
+
+    def update(self):
+        self.position = (self.position[0] + self.xspeed, self.position[1] + self.yspeed)
+
+class Ship(pygame.sprite.Sprite):
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self) 
+        self.image, self.rect = load_image("images/spaceship.png", -1)
         #self.image = self.image.convert()
         self.position = (320, 432)
         self.xSpeed = 0
+#    def __init__(self):
+#        self.image = loadImage("images/spaceship.png")
+#        #self.image = self.image.convert()
+#        self.position = (320, 432)
+#        self.xSpeed = 0
         
     def moveLeft(self):
         self.xSpeed = 10
@@ -57,3 +82,6 @@ class Ship():
 
     def update(self):
         self.position = (self.position[0] + self.xSpeed, self.position[1])
+
+    def shoot(self):
+        print("shoot!")
