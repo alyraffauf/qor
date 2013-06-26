@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # Alien Invasion: 2150 - a game inspired by Space Invaders
 # Copyright (C) 2011 Thomas Chace <ithomashc@gmail.com>
 
@@ -30,4 +30,4 @@ game = alieninvasion.AlienInvasion()
 while True:
     clock = pygame.time.Clock()
     clock.tick(60)
-    game.show()
+    game.update()

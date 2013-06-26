@@ -29,7 +29,7 @@ class AlienInvasion():
     def __init__(self):
         self.playlist = ['audio/spaceInvadersByPornophonique.ogg',
             'audio/drillDownBySeveredFifth.ogg']
-        self.player = Player(self.playlist)
+        self.audio = Player(self.playlist)
         pygame.display.init()
         pygame.font.init()
         self.window = pygame.display.set_mode((640, 480))
@@ -43,7 +43,7 @@ class AlienInvasion():
         self.background = pygame.image.load(fullname)
         self.background.convert()
 
-        self.spaceShip = Ship()
+        self.player = Ship()
         self.font = pygame.font.Font(None, 36)
         
         self.text = self.font.render("Alien Invasion: 2150 (Alpha)", 
@@ -52,13 +52,13 @@ class AlienInvasion():
         self.textpos.centerx = self.screen.get_rect().centerx
         self.textpos.centery = self.screen.get_rect().centery
 
-        self.player.play()
-        self.missles = []
-        self.asteroids = []
+        self.audio.play()
+        self.missles = pygame.sprite.Group()
+        self.asteroids = pygame.sprite.Group()
         num_ast = 0
         while True:
             if num_ast < 5:
-                self.asteroids.append(Asteroid())
+                self.asteroids.add(Asteroid())
                 num_ast = num_ast + 1
             else:
                 break
@@ -68,7 +68,7 @@ class AlienInvasion():
         self.screen = pygame.display.get_surface()
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.text, self.textpos)
-        self.screen.blit(self.spaceShip.image, self.spaceShip.position)
+        self.screen.blit(self.player.image, self.player.position)
         for asteroid in self.asteroids:
             self.screen.blit(asteroid.image[0], asteroid.position)
 
@@ -78,11 +78,11 @@ class AlienInvasion():
         pygame.display.update()
 
 
-    def show(self):
+    def update(self):
         self.eventInput(pygame.event.get())
-        self.spaceShip.update()
+        self.player.update()
         for asteroid in self.asteroids:
-            asteroid.update()
+            asteroid.update(self.missles, self.player)
             
         for missle in self.missles:
             missle.update()
@@ -94,17 +94,18 @@ class AlienInvasion():
             if event.type == QUIT: 
                 sys.exit(0)
             elif event.type == KEYDOWN and event.key == K_LEFT:
-                self.spaceShip.moveRight()
+                self.player.moveRight()
             elif event.type == KEYDOWN and event.key == K_RIGHT:
-                self.spaceShip.moveLeft()
+                self.player.moveLeft()
             elif event.type == KEYUP and (event.key == K_LEFT or event.key == K_RIGHT):
-                self.spaceShip.stop()
+                self.player.stop()
             elif event.type == KEYUP and event.key == K_SPACE:
-                self.spaceShip.shoot()
+                self.player.shoot()
                 
                 missle = Missle()
-                missle.position = self.spaceShip.position
-                self.missles.append(missle)
+                missle.position = self.player.position
+                missle.rect = Rect(missle.position[0], missle.position[1], 24, 24)
+                self.missles.add(missle)
             else: 
                 print(event)
 
@@ -113,4 +114,4 @@ if __name__ == '__main__':
     while True:
         clock = pygame.time.Clock()
         clock.tick(60)
-        alienInvasion.show()
+        alienInvasion.update()
