@@ -55,11 +55,12 @@ class AlienInvasion():
         self.audio.play()
         self.missles = pygame.sprite.Group()
         self.asteroids = pygame.sprite.Group()
-        num_ast = 0
+        self.num_ast = 0
+        #self.asteroids.add(Asteroid())
         while True:
-            if num_ast < 5:
+            if self.num_ast < 5:
                 self.asteroids.add(Asteroid())
-                num_ast = num_ast + 1
+                self.num_ast = self.num_ast + 1
             else:
                 break
         #self.asteroid = Asteroid()
@@ -70,6 +71,7 @@ class AlienInvasion():
         self.screen.blit(self.text, self.textpos)
         self.screen.blit(self.player.image, self.player.position)
         for asteroid in self.asteroids:
+            #asteroid.kill()
             self.screen.blit(asteroid.image[0], asteroid.position)
 
         for missle in self.missles:
@@ -82,6 +84,9 @@ class AlienInvasion():
         self.eventInput(pygame.event.get())
         self.player.update()
         for asteroid in self.asteroids:
+            if pygame.sprite.spritecollide(asteroid, self.missles, False):
+                asteroid.kill()
+                self.asteroids.add(Asteroid())
             asteroid.update(self.missles, self.player)
             
         for missle in self.missles:

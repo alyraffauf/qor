@@ -32,15 +32,14 @@ class Asteroid(pygame.sprite.Sprite):
         self.image = load_image("images/asteroid.png")
         self.position = [random.randrange(0, 640 - 24), -24]
         self.rect = Rect(self.position[0], self.position[1], 24, 24)
-        self.x_speed = random.randrange(-1,1)
-        self.y_speed = 5
+        self.x_speed = 0#random.randrange(-1,1)
+        self.y_speed = 3
 
     def update(self, missles, player):
         self.rect.left += self.x_speed
         self.rect.top += self.y_speed
         self.position = (self.position[0] + self.x_speed, self.position[1] + self.y_speed)
-        if pygame.sprite.spritecollide(self, missles, False):
-            self.kill()
+        
 
 class Alien():
     def __init__(self):
