@@ -44,21 +44,26 @@ class AlienInvasion():
         self.background.convert()
 
         self.player = Ship()
-        self.font = pygame.font.Font(None, 36)
+        self.font = pygame.font.Font("media/Lato-Regular.ttf", 36)
 
         self.audio.play()
         self.missles = pygame.sprite.Group()
         self.player_missles = pygame.sprite.Group()
         self.asteroids = pygame.sprite.Group()
+        self.players = pygame.sprite.Group()
+        self.players.add(self.player)
         self.num_ast = 0
         self.score = 0
         
     def draw(self):
         self.score_text = self.font.render("Score: " + str(self.score), 6, (0, 0, 0))
         self.scorepos = (10, 50)
+        self.health_text = self.font.render("Health: " + str(self.player.health), 6, (0, 0, 0))
+        self.health_position = (10, 10)
         self.screen = pygame.display.get_surface()
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.score_text, self.scorepos)
+        self.screen.blit(self.health_text, self.health_position)
         self.screen.blit(self.player.image, self.player.position)
         for asteroid in self.asteroids:
             #asteroid.kill()
@@ -87,6 +92,10 @@ class AlienInvasion():
                 #self.asteroids.add(Asteroid())
                 self.num_ast -= 1
                 self.score += 1
+            if pygame.sprite.spritecollide(asteroid, self.players, False):
+                asteroid.kill()
+                self.num_ast -= 1
+                self.player.decreaseHealth()
             asteroid.update(self.missles, self.player)
             
         for missle in self.missles:

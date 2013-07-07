@@ -68,16 +68,13 @@ class Ship(pygame.sprite.Sprite):
         self.image, self.rect = load_image("spaceship.png", -1)
         #self.image = self.image.convert()
         self.position = (320, 432)
+        self.rect = Rect(self.position[0], self.position[1], 24, 24)
         self.xSpeed = 0
         self.health = 10
-#    def __init__(self):
-#        self.image = loadImage("images/spaceship.png")
-#        #self.image = self.image.convert()
-#        self.position = (320, 432)
-#        self.xSpeed = 0
 
     def decreaseHealth(self):
         self.health = self.health - 1
+        print("minus 1!")
         if self.health == 0:
             print("dead!")
         
@@ -91,6 +88,7 @@ class Ship(pygame.sprite.Sprite):
         self.xSpeed = 0
 
     def update(self):
+        self.rect.left += self.xSpeed
         self.position = (self.position[0] + self.xSpeed, self.position[1])
 
     def shoot(self):
