@@ -19,7 +19,7 @@ import sys
 import os
 import pygame
 
-newPath = os.path.realpath(__file__ + "/../../src")
+newPath = os.path.realpath(__file__ + "/../src/")
 os.chdir(newPath)
 sys.path.insert(0, newPath)
 
