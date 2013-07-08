@@ -21,9 +21,6 @@ from utils import *
 
 import os, sys
 
-if not pygame.font: print 'Warning, fonts disabled'
-if not pygame.mixer: print 'Warning, sound disabled'
-
 random.seed()
 
 class Asteroid(pygame.sprite.Sprite):
@@ -32,21 +29,14 @@ class Asteroid(pygame.sprite.Sprite):
         self.image = load_image("asteroid.png")
         self.position = [random.randrange(0, 640 - 24), -24]
         self.rect = Rect(self.position[0], self.position[1], 24, 24)
-        self.x_speed = 0#random.randrange(-1,1)
+        self.x_speed = random.randrange(-1,1)
         self.y_speed = 3
 
     def update(self, missles, player):
         self.rect.left += self.x_speed
         self.rect.top += self.y_speed
         self.position = (self.position[0] + self.x_speed, self.position[1] + self.y_speed)
-        
-
-class Alien():
-    def __init__(self):
-        self.rect = pygame.Surface((48,48))
-        self.rect = self.rect.convert()
-        self.rect.fill((250, 250, 250))
-        
+              
 class Missle(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) 
@@ -67,29 +57,27 @@ class Ship(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self) 
         self.image, self.rect = load_image("spaceship.png", -1)
         #self.image = self.image.convert()
-        self.position = (320, 432)
-        self.rect = Rect(self.position[0], self.position[1], 24, 24)
-        self.xSpeed = 0
+        self.x = 320
+        self.y = 432
+        self.rect = Rect(self.x, self.y, 24, 24)
+        self.x_speed = 0
         self.health = 10
 
-    def decreaseHealth(self):
-        self.health = self.health - 1
-        print("minus 1!")
-        if self.health == 0:
-            print("dead!")
+    def decrease_health(self):
+        self.health -= 1
         
-    def moveLeft(self):
-        self.xSpeed = 10
+    def move_left(self):
+        self.x_speed = 10
        
-    def moveRight(self):
-        self.xSpeed = -10
+    def move_right(self):
+        self.x_speed = -10
 
     def stop(self):
-        self.xSpeed = 0
+        self.x_speed = 0
 
     def update(self):
-        self.rect.left += self.xSpeed
-        self.position = (self.position[0] + self.xSpeed, self.position[1])
+        self.rect.left += self.x_speed
+        self.x += self.x_speed
 
     def shoot(self):
         print("shoot!")
