@@ -23,15 +23,10 @@ from pygame.locals import *
 from utils import *
 from objects import *
 
-pygame.display.set_mode((640, 480))
-pygame.display.set_caption("Alien Invasion: 2150")
+pygame.init()
 
 class GameDisplay():
     def __init__(self, screen):
-
-        pygame.display.init()
-        pygame.font.init()
-        
         self.screen = screen
 
         self.font = pygame.font.Font("media/Lato-Regular.ttf", 36)
@@ -59,6 +54,9 @@ class Game():
         self.map = game_map
         self.screen = screen
 
+        self.js = pygame.joystick.Joystick(0)
+        self.js.init()
+
         self.player = Ship()
         self.missles = pygame.sprite.Group()
         self.player_missles = pygame.sprite.Group()
@@ -67,6 +65,11 @@ class Game():
         self.players.add(self.player)
         self.num_ast = 0
         self.score = 0
+        self.joysticks = []
+        for i in range(0, pygame.joystick.get_count()):
+            self.joysticks.append(pygame.joystick.Joystick(i))
+            self.joysticks[-1].init()
+        print "Detected joystick '",self.joysticks[-1].get_name(),"'"
 
     def update(self):
         self.event_input(pygame.event.get())
@@ -93,40 +96,59 @@ class Game():
                 asteroid.kill()
                 self.num_ast -= 1
             elif asteroid.position[0] > 640 or asteroid.position[0] < 0:
-                asteroid.x_speed = (asteroid.x_speed * -1)
+                asteroid.x_speed *= -1
             else:
                 self.screen.blit(asteroid.image[0], asteroid.position)
             asteroid.update(self.missles, self.player)
 
         for missle in self.missles:
             missle.update()
-            self.screen.blit(missle.image[0], missle.position)
+            self.screen.blit(missle.image[0], (missle.x, missle.y))
 
     def event_input(self, events):
         for event in events: 
-            if event.type == QUIT: 
+            # Keyboard Input
+            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE): 
                 sys.exit(0)
-            elif event.type == KEYDOWN and event.key == K_LEFT:
-                self.player.move_right()
-            elif event.type == KEYDOWN and event.key == K_RIGHT:
-                self.player.move_left()
-            elif event.type == KEYUP and (event.key == K_LEFT or event.key == K_RIGHT):
-                self.player.stop()
-            elif event.type == KEYUP and event.key == K_SPACE:
+
+            elif (event.type == KEYUP and event.key == K_SPACE):
                 self.player.shoot()
                 
-                missle = Missle()
-                missle.position = (self.player.x, self.player.y)
-                missle.rect = Rect(missle.position[0], missle.position[1], 24, 24)
+                missle = Missle(self.player.x, self.player.y)
                 self.missles.add(missle)
-            else: 
+            elif (event.type == KEYDOWN and event.key == K_LEFT):
+                self.player.move_right()
+            elif (event.type == KEYDOWN and event.key == K_RIGHT):
+                self.player.move_left()
+            elif (event.type == KEYUP and (event.key == K_LEFT or event.key == K_RIGHT)):
+                self.player.stop()
+            else:
                 print(event)
+
+            # Controller Input
+            try: 
+                if (event.type == JOYBUTTONDOWN and event.button == 6):
+                    sys.exit(0)
+                elif (event.type == JOYBUTTONDOWN and event.button == 0):
+                    self.player.shoot()
+                
+                    missle = Missle(self.player.x, self.player.y)
+                    self.missles.add(missle)
+                elif (event.type == JOYAXISMOTION and self.joysticks[event.joy].get_axis(0) < -0.7):
+                    self.player.move_right()
+                elif (event.type == JOYAXISMOTION and self.joysticks[event.joy].get_axis(0) > 0.7):
+                    self.player.move_left()
+                elif (event.type == JOYAXISMOTION) and self.joysticks[event.joy].get_axis(0) < 0.5 or self.joysticks[event.joy].get_axis(0) > -0.5:
+                    self.player.stop()
+            except:
+                pass
+
+
 
 
 class Player():
     def __init__(self, playlist):
         self.playlist = playlist
-        pygame.mixer.init()
 
         self.song = self.playlist[0]
         self.sound = load_sound(self.song)
@@ -144,6 +166,8 @@ class Player():
             self.sound.play()
 
 
+pygame.display.set_mode((640, 480))
+pygame.display.set_caption("Alien Invasion: 2150")
 
 audio = Player(["space-invaders-by-pornophonique.ogg"])
 audio.play()
@@ -163,3 +187,5 @@ while True:
     game.update()
     audio.update()
     pygame.display.update()
+    
+    #print('axis 0: ' + str(jx))

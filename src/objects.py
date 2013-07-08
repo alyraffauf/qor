@@ -38,18 +38,18 @@ class Asteroid(pygame.sprite.Sprite):
         self.position = (self.position[0] + self.x_speed, self.position[1] + self.y_speed)
               
 class Missle(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self) 
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
         self.image = load_image("asteroid.png")
-        self.position = [random.randrange(0, 640 - 24), -24]
-        self.rect = Rect(self.position[0], self.position[1], 24, 24)
-        self.x_speed = 0
+
+        self.rect = Rect(x, y, 24, 24)
+        self.x = x
+        self.y = y
         self.y_speed = -8
 
     def update(self):
-        self.rect.left += self.x_speed
         self.rect.top += self.y_speed
-        self.position = (self.position[0] + self.x_speed, self.position[1] + self.y_speed)
+        self.y += self.y_speed
 
 class Ship(pygame.sprite.Sprite):
 
