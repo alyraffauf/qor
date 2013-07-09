@@ -56,9 +56,8 @@ class Ship(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) 
         self.image, self.rect = load_image("spaceship.png", -1)
-        #self.image = self.image.convert()
-        self.x = 320
-        self.y = 432
+        self.x = 400
+        self.y = 552
         self.rect = Rect(self.x, self.y, 48, 48)
         self.x_speed = 0
         self.health = 10

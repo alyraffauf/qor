@@ -31,30 +31,49 @@ class GameDisplay():
 
         self.font = pygame.font.Font("media/Lato-Regular.ttf", 36)
 
-        fullname = os.path.join('./media/', "background.png")
-        fullname = os.path.realpath(fullname)
+        #fullname = os.path.join('./media/', "background.png")
+        #fullname = os.path.realpath(fullname)
 
-        self.background = pygame.image.load(fullname)
-        self.background.convert()
+        #self.background = pygame.image.load(fullname)
+        #self.background.convert()
 
     def update(self, score, health):
-        self.score_board = self.font.render("Score: " + str(score), 6, (0, 0, 0))
-        self.health_indicator = self.font.render("Health: " + str(health), 6, (0, 0, 0))
+        self.score_board = self.font.render("Score: " + str(score), 6, (255, 255, 255))
+        self.health_indicator = self.font.render("Health: " + str(health), 6, (255, 255, 255))
 
         self.score_position = (10, 50)
         self.health_position = (10, 10)
 
-        self.screen.blit(self.background, (0, 0))
+        self.screen.fill((0, 0, 0))
+
+        #self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.score_board, self.score_position)
         self.screen.blit(self.health_indicator, self.health_position)
 
+class GameOver():
+    def __init__(self, screen, game_map):
+        self.screen = screen
+        self.map = game_map
+
+        self.font = pygame.font.Font("media/Lato-Regular.ttf", 50)
+
+    def update(self, score, health):
+        game_over = self.map.font.render("GAME OVER", 6, (255, 255, 255))
+        game_over_position = (350, 300)
+
+        self.screen.blit(game_over, game_over_position)
+
+    def event_input(self, events):
+        for event in events:
+            if (event.type == QUIT) or (event.type == KEYDOWN and event.key == K_ESCAPE) or (event.type == JOYBUTTONDOWN and event.button == 6): 
+                sys.exit(0)
+
 class Game():
     def __init__(self, game_map, screen):
+        self.running = True
         self.map = game_map
         self.screen = screen
-
-        self.js = pygame.joystick.Joystick(0)
-        self.js.init()
+        self.game_over = GameOver(screen, game_map)
 
         self.player = Ship()
         self.missles = pygame.sprite.Group()
@@ -68,50 +87,56 @@ class Game():
         for i in range(0, pygame.joystick.get_count()):
             self.joysticks.append(pygame.joystick.Joystick(i))
             self.joysticks[-1].init()
-        print "Detected joystick '",self.joysticks[-1].get_name(),"'"
 
     def update(self):
+        self.map.update(self.score, self.player.health)
         
-        self.event_input(pygame.event.get())
-        self.player.update()
+        if self.running:
+            self.event_input(pygame.event.get())
+            self.player.update()
 
-        while True:
-            if self.num_ast < 5:
-                self.asteroids.add(Asteroid())
-                self.num_ast = self.num_ast + 1
-            else:
-                break
-        self.screen.blit(self.player.image, (self.player.x, self.player.y))
-        for asteroid in self.asteroids:
-            if pygame.sprite.spritecollide(asteroid, self.missles, False):
-                asteroid.kill()
-                self.num_ast -= 1
-                self.score += 1
-            if pygame.sprite.spritecollide(asteroid, self.players, False):
-                asteroid.kill()
-                self.num_ast -= 1
-                self.player.decrease_health()
-                if self.player.health == 0:
-                    print("DEAD!")
-            if asteroid.position[1] > 480:
-                asteroid.kill()
-                self.num_ast -= 1
-            elif asteroid.position[0] > 640 or asteroid.position[0] < 0:
-                asteroid.x_speed *= -1
-            else:
-                self.screen.blit(asteroid.image[0], asteroid.position)
-            asteroid.update(self.missles, self.player)
+            while True:
+                if self.num_ast < 5:
+                    self.asteroids.add(Asteroid())
+                    self.num_ast = self.num_ast + 1
+                else:
+                    break
+            self.screen.blit(self.player.image, (self.player.x, self.player.y))
+            for asteroid in self.asteroids:
+                if pygame.sprite.spritecollide(asteroid, self.missles, False):
+                    asteroid.kill()
+                    self.num_ast -= 1
+                    self.score += 1
+                if pygame.sprite.spritecollide(asteroid, self.players, False):
+                    asteroid.kill()
+                    self.num_ast -= 1
+                    self.player.decrease_health()
+                    if self.player.health == 0:
+                        print("DEAD!")
+                if asteroid.position[1] > 600:
+                    asteroid.kill()
+                    self.num_ast -= 1
+                elif asteroid.position[0] > 800 or asteroid.position[0] < 0:
+                    asteroid.x_speed *= -1
+                else:
+                    self.screen.blit(asteroid.image[0], asteroid.position)
+                asteroid.update(self.missles, self.player)
 
-        for missle in self.missles:
-            missle.update()
-            self.screen.blit(missle.image[0], (missle.x, missle.y))
+            for missle in self.missles:
+                missle.update()
+                self.screen.blit(missle.image[0], (missle.x, missle.y))
+
+        else:
+            self.game_over.event_input(pygame.event.get())
+            self.game_over.update(self.score, self.player.health)
 
     def event_input(self, events):
         for event in events: 
             # Keyboard Input
-            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE) or (event.type == JOYBUTTONDOWN and event.button == 6): 
+            if event.type == QUIT:
                 sys.exit(0)
-
+            elif (event.type == KEYDOWN and event.key == K_ESCAPE) or (event.type == JOYBUTTONDOWN and event.button == 6): 
+                self.running = False
             elif (event.type == KEYUP and event.key == K_SPACE) or (event.type == JOYBUTTONDOWN and event.button == 0):
                 self.player.shoot()
                 
@@ -143,19 +168,16 @@ class Player():
         self.playing = True
 
     def update(self):
-        if pygame.mixer.get_busy() and self.playing == True:
-            pass
-        else:
+        if not pygame.mixer.get_busy() and not self.playing == True:
             self.sound.play()
 
 
-pygame.display.set_mode((640, 480))
+pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Alien Invasion: 2150")
 
 audio = Player(["space-invaders-by-pornophonique.ogg"])
-#audio.play()
+audio.play()
 
-pygame.display.set_mode((640, 480))
 screen = pygame.display.get_surface()
 game_map = GameDisplay(screen)
 game = Game(game_map, screen)
@@ -163,12 +185,12 @@ game = Game(game_map, screen)
 while True:
     clock = pygame.time.Clock()
     clock.tick(60)
-    #if alienInvasion.player.health == 0:
-    #    sys.exit()
-    #else:
-    game_map.update(game.score, game.player.health)
     game.update()
-    #audio.update()
+    audio.update()
+    if game.player.health == 0:
+        game.running = False
+    else:
+        pass
+
     pygame.display.update()
     
-    #print('axis 0: ' + str(jx))
