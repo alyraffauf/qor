@@ -48,7 +48,6 @@ class GameDisplay():
         self.screen.blit(self.score_board, self.score_position)
         self.screen.blit(self.health_indicator, self.health_position)
 
-
 class Game():
     def __init__(self, game_map, screen):
         self.map = game_map
@@ -72,8 +71,10 @@ class Game():
         print "Detected joystick '",self.joysticks[-1].get_name(),"'"
 
     def update(self):
+        
         self.event_input(pygame.event.get())
         self.player.update()
+
         while True:
             if self.num_ast < 5:
                 self.asteroids.add(Asteroid())
@@ -108,43 +109,25 @@ class Game():
     def event_input(self, events):
         for event in events: 
             # Keyboard Input
-            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE): 
+            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE) or (event.type == JOYBUTTONDOWN and event.button == 6): 
                 sys.exit(0)
 
-            elif (event.type == KEYUP and event.key == K_SPACE):
+            elif (event.type == KEYUP and event.key == K_SPACE) or (event.type == JOYBUTTONDOWN and event.button == 0):
                 self.player.shoot()
                 
                 missle = Missle(self.player.x, self.player.y)
                 self.missles.add(missle)
-            elif (event.type == KEYDOWN and event.key == K_LEFT):
+            elif (event.type == KEYDOWN and event.key == K_LEFT):# or (event.type == JOYAXISMOTION and self.joysticks[event.joy].get_axis(0) < -0.7):
                 self.player.move_right()
-            elif (event.type == KEYDOWN and event.key == K_RIGHT):
+            elif (event.type == KEYDOWN and event.key == K_RIGHT):# or (event.type == JOYAXISMOTION and self.joysticks[event.joy].get_axis(0) > 0.7):
                 self.player.move_left()
+            elif event.type == JOYAXISMOTION:
+                if (self.joysticks[event.joy].get_axis(0) < -0.4) or (self.joysticks[event.joy].get_axis(0) > 0.4):
+                    self.player.x_speed = round(5 * self.joysticks[event.joy].get_axis(0), 1)
+                else:
+                    self.player.x_speed = 0
             elif (event.type == KEYUP and (event.key == K_LEFT or event.key == K_RIGHT)):
                 self.player.stop()
-            else:
-                print(event)
-
-            # Controller Input
-            try: 
-                if (event.type == JOYBUTTONDOWN and event.button == 6):
-                    sys.exit(0)
-                elif (event.type == JOYBUTTONDOWN and event.button == 0):
-                    self.player.shoot()
-                
-                    missle = Missle(self.player.x, self.player.y)
-                    self.missles.add(missle)
-                elif (event.type == JOYAXISMOTION and self.joysticks[event.joy].get_axis(0) < -0.7):
-                    self.player.move_right()
-                elif (event.type == JOYAXISMOTION and self.joysticks[event.joy].get_axis(0) > 0.7):
-                    self.player.move_left()
-                elif (event.type == JOYAXISMOTION) and self.joysticks[event.joy].get_axis(0) < 0.5 or self.joysticks[event.joy].get_axis(0) > -0.5:
-                    self.player.stop()
-            except:
-                pass
-
-
-
 
 class Player():
     def __init__(self, playlist):
@@ -170,7 +153,7 @@ pygame.display.set_mode((640, 480))
 pygame.display.set_caption("Alien Invasion: 2150")
 
 audio = Player(["space-invaders-by-pornophonique.ogg"])
-audio.play()
+#audio.play()
 
 pygame.display.set_mode((640, 480))
 screen = pygame.display.get_surface()
@@ -185,7 +168,7 @@ while True:
     #else:
     game_map.update(game.score, game.player.health)
     game.update()
-    audio.update()
+    #audio.update()
     pygame.display.update()
     
     #print('axis 0: ' + str(jx))

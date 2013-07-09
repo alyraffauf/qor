@@ -59,7 +59,7 @@ class Ship(pygame.sprite.Sprite):
         #self.image = self.image.convert()
         self.x = 320
         self.y = 432
-        self.rect = Rect(self.x, self.y, 24, 24)
+        self.rect = Rect(self.x, self.y, 48, 48)
         self.x_speed = 0
         self.health = 10
 
