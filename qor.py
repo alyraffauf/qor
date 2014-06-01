@@ -29,7 +29,7 @@ class GameDisplay():
     def __init__(self, screen):
         self.screen = screen
 
-        self.font = pygame.font.Font("media/Lato-Regular.ttf", 36)
+        self.font = pygame.font.Font(pygame.font.match_font("FreeMono"), 36)
 
         #fullname = os.path.join('./media/', "background.png")
         #fullname = os.path.realpath(fullname)
@@ -38,8 +38,8 @@ class GameDisplay():
         #self.background.convert()
 
     def update(self, score, health):
-        self.score_board = self.font.render("Score: " + str(score), 6, (255, 255, 255))
-        self.health_indicator = self.font.render("Health: " + str(health), 6, (255, 255, 255))
+        self.score_board = self.font.render("SCORE: " + str(score), 6, (26, 174, 0))
+        self.health_indicator = self.font.render("HEALTH: " + str(health), 6, (26, 174, 0))
 
         self.score_position = (10, 50)
         self.health_position = (10, 10)
@@ -55,10 +55,10 @@ class GameOver():
         self.screen = screen
         self.map = game_map
 
-        self.font = pygame.font.Font("media/Lato-Regular.ttf", 50)
+        self.font = pygame.font.Font(pygame.font.match_font("FreeMono"), 50)
 
     def update(self, score, health):
-        game_over = self.map.font.render("GAME OVER", 6, (255, 255, 255))
+        game_over = self.map.font.render("GAME OVER", 6, (26, 174, 0))
         game_over_position = (350, 300)
 
         self.screen.blit(game_over, game_over_position)
@@ -79,6 +79,7 @@ class Game():
         self.missles = pygame.sprite.Group()
         self.player_missles = pygame.sprite.Group()
         self.asteroids = pygame.sprite.Group()
+        self.healthbars = pygame.sprite.Group()
         self.players = pygame.sprite.Group()
         self.players.add(self.player)
         self.num_ast = 0
@@ -87,6 +88,11 @@ class Game():
         for i in range(0, pygame.joystick.get_count()):
             self.joysticks.append(pygame.joystick.Joystick(i))
             self.joysticks[-1].init()
+
+        self.healthbars.add(Healthbar(100))
+        self.healthbars.add(Healthbar(300))
+        self.healthbars.add(Healthbar(500))
+        self.healthbars.add(Healthbar(700))
 
     def update(self):
         self.map.update(self.score, self.player.health)
@@ -102,6 +108,13 @@ class Game():
                 else:
                     break
             self.screen.blit(self.player.image, (self.player.x, self.player.y))
+            for healthbar in self.healthbars:
+                self.screen.blit(healthbar.image[0], healthbar.position)
+                if pygame.sprite.spritecollide(healthbar, self.asteroids, False):
+                    healthbar.kill()
+                    self.player.decrease_health()
+                    if self.player.health == 0:
+                        print("DEAD!")
             for asteroid in self.asteroids:
                 if pygame.sprite.spritecollide(asteroid, self.missles, False):
                     asteroid.kill()
@@ -113,6 +126,7 @@ class Game():
                     self.player.decrease_health()
                     if self.player.health == 0:
                         print("DEAD!")
+
                 if asteroid.position[1] > 600:
                     asteroid.kill()
                     self.num_ast -= 1
@@ -128,7 +142,7 @@ class Game():
 
         else:
             self.game_over.event_input(pygame.event.get())
-            self.game_over.update(self.score, self.player.health)
+            self.game_over.update(self.score + (len(self.healthbars) * 10), self.player.health)
 
     def event_input(self, events):
         for event in events: 
@@ -167,13 +181,16 @@ class Player():
         self.sound.play()
         self.playing = True
 
+    def stop(self):
+        self.sound.stop()
+
     def update(self):
         if not pygame.mixer.get_busy() and not self.playing == True:
             self.sound.play()
 
 
 pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Alien Invasion: 2150")
+pygame.display.set_caption("Qor")
 
 audio = Player(["space-invaders-by-pornophonique.ogg"])
 audio.play()
@@ -189,6 +206,7 @@ while True:
     audio.update()
     if game.player.health == 0:
         game.running = False
+        audio.stop()
     else:
         pass
 

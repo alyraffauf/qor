@@ -23,6 +23,16 @@ import os, sys
 
 random.seed()
 
+class Healthbar(pygame.sprite.Sprite):
+    def __init__(self, x):
+        pygame.sprite.Sprite.__init__(self) 
+        self.image = load_image("healthbar.png")
+        self.position = [x, 480]
+        self.rect = Rect(self.position[0], self.position[1], 72, 24)
+
+    def update(self, missles, player):
+        pass
+
 class Asteroid(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) 
@@ -55,10 +65,10 @@ class Ship(pygame.sprite.Sprite):
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) 
-        self.image, self.rect = load_image("space_ship.png", -1)
+        self.image, self.rect = load_image("spaceship.png", -1)
         self.x = 400
-        self.y = 504
-        self.rect = Rect(self.x, self.y, 96, 96)
+        self.y = 528
+        self.rect = Rect(self.x, self.y, 48, 48)
         self.x_speed = 0
         self.health = 10
 
