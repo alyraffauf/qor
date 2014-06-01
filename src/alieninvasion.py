@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-# Alien Invasion: 2150 - a game inspired by Space Invaders
+# Qor - a game inspired by Space Invaders
 # Copyright (C) 2011 Thomas Chace <ithomashc@gmail.com>
 
-# Alien Invasion: 2150 is free software: you can redistribute it and/or modify
+# Qoris free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-# Alien Invasion: 2150 is distributed in the hope that it will be useful,
+# Qor is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -173,7 +173,7 @@ class Player():
 
 
 pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Alien Invasion: 2150")
+pygame.display.set_caption("Qor")
 
 audio = Player(["space-invaders-by-pornophonique.ogg"])
 audio.play()
