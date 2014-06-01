@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
 Version=0.1
-Name=Alien Invasion: 2150
+Name=Qor
 Comment=A spaceship game inspired by Space Invaders
-Icon=alieninvasion
-Exec=alieninvasion
+Icon=qor
+Exec=/usr/share/qor/qor.py
 Terminal=false
 StartupNotify=false
 Categories=Game;ArcadeGame;

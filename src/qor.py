@@ -2,12 +2,12 @@
 # Qor - a game inspired by Space Invaders
 # Copyright (C) 2011 Thomas Chace <ithomashc@gmail.com>
 
-# Qoris free software: you can redistribute it and/or modify
+# Qor is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-# Qor is distributed in the hope that it will be useful,
+# Qoris distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -146,12 +146,12 @@ class Game():
                 self.player.move_right()
             elif (event.type == KEYDOWN and event.key == K_RIGHT):# or (event.type == JOYAXISMOTION and self.joysticks[event.joy].get_axis(0) > 0.7):
                 self.player.move_left()
-            elif event.type == JOYAXISMOTION:
-                if (self.joysticks[event.joy].get_axis(0) < -0.4) or (self.joysticks[event.joy].get_axis(0) > 0.4):
-                    self.player.x_speed = round(5 * self.joysticks[event.joy].get_axis(0), 1)
-                else:
-                    self.player.x_speed = 0
-            elif (event.type == KEYUP and (event.key == K_LEFT or event.key == K_RIGHT)):
+            #elif event.type == JOYAXISMOTION:
+            #    if (self.joysticks[event.joy].get_axis(0) < -0.4) or (self.joysticks[event.joy].get_axis(0) > 0.4):
+            #        self.player.x_speed = round(5 * self.joysticks[event.joy].get_axis(0), 1)
+            #    else:
+            #        self.player.x_speed = 0
+            elif (event.type == KEYUP):# and (event.key == K_LEFT or event.key == K_RIGHT)):
                 self.player.stop()
 
 class Player():
@@ -173,7 +173,7 @@ class Player():
 
 
 pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Qor")
+pygame.display.set_caption("Alien Invasion: 2150")
 
 audio = Player(["space-invaders-by-pornophonique.ogg"])
 audio.play()

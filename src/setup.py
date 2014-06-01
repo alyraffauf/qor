@@ -1,12 +1,12 @@
 # Qor - a game inspired by Space Invaders
 # Copyright (C) 2011 Thomas Chace <ithomashc@gmail.com>
 
-# Qoris free software: you can redistribute it and/or modify
+# Qor is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-# Qor is distributed in the hope that it will be useful,
+# Qoris distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -58,13 +58,13 @@ class pygame2exe(py2exe.build_exe.py2exe): #This hack make sure that pygame defa
 class BuildExe:
     def __init__(self):
         #Name of starting .py
-        self.script = "alieninvasion.py"
+        self.script = "qor.py"
  
         #Name of program
-        self.project_name = "Alien Invasion: 2150"
+        self.project_name = "Qor"
  
         #Project url
-        self.project_url = "http://github.com/thomashc"
+        self.project_url = "http://github.com/thomashc/qor"
  
         #Version of program
         self.project_version = "0.5"
@@ -75,10 +75,10 @@ class BuildExe:
         #Auhor of program
         self.author_name = "Thomas Chace"
         self.author_email = "tchacex@gmail.com"
-        self.copyright = "Copyright (c) 2012-2013 Thomas Chace."
+        self.copyright = "Copyright (c) 2012-2014 Thomas Chace."
  
         #Description
-        self.project_description = "Shooting Game"
+        self.project_description = "Shooting game inspired by Space Invaders"
  
         #Icon file (None will use pygame default icon)
         self.icon_file = None

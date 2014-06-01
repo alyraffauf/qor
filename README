@@ -1,11 +1,11 @@
 Multimedia is released under the CC Attribution Share-Alike License.
 spaceInvadersByPornophonique.ogg is released under the CC BY-NC-SA
+asteroid.png, by Raindropmemory, is available under the Creative Commons Attribution-No Derivative Works 3.0 Unported
 qor is released under the General Public License 3. 
-See GPL3.txt for more details.
+See GPL.txt for more details.
 
 Requirements:
 * python 2.7+
 * pygame
-
 
 Qor is a 2D shooter inspired by Space Invaders and Galaga. It's still in development, so you were warned.
