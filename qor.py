@@ -113,19 +113,15 @@ class Game():
                 if pygame.sprite.spritecollide(healthbar, self.asteroids, False):
                     healthbar.kill()
                     self.player.decrease_health()
-                    if self.player.health == 0:
-                        print("DEAD!")
             for asteroid in self.asteroids:
                 if pygame.sprite.spritecollide(asteroid, self.missles, False):
                     asteroid.kill()
                     self.num_ast -= 1
                     self.score += 1
-                if pygame.sprite.spritecollide(asteroid, self.players, False):
+                elif pygame.sprite.spritecollide(asteroid, self.players, False):
                     asteroid.kill()
                     self.num_ast -= 1
                     self.player.decrease_health()
-                    if self.player.health == 0:
-                        print("DEAD!")
 
                 if asteroid.position[1] > 600:
                     asteroid.kill()
