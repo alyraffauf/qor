@@ -101,12 +101,10 @@ class Game():
             self.event_input(pygame.event.get())
             self.player.update()
 
-            while True:
-                if self.num_ast < 5:
-                    self.asteroids.add(Asteroid())
-                    self.num_ast = self.num_ast + 1
-                else:
-                    break
+            while self.num_ast <= 5:
+                self.asteroids.add(Asteroid())
+                self.num_ast = self.num_ast + 1
+
             self.screen.blit(self.player.image, (self.player.x, self.player.y))
             for healthbar in self.healthbars:
                 self.screen.blit(healthbar.image[0], healthbar.position)
@@ -147,9 +145,7 @@ class Game():
                 sys.exit(0)
             elif (event.type == KEYDOWN and event.key == K_ESCAPE) or (event.type == JOYBUTTONDOWN and event.button == 6): 
                 self.running = False
-            elif (event.type == KEYUP and event.key == K_SPACE) or (event.type == JOYBUTTONDOWN and event.button == 0):
-                self.player.shoot()
-                
+            elif (event.type == KEYUP and event.key == K_SPACE) or (event.type == JOYBUTTONDOWN and event.button == 0):                
                 missle = Missle(self.player.x, self.player.y)
                 self.missles.add(missle)
             elif (event.type == KEYDOWN and event.key == K_LEFT):# or (event.type == JOYAXISMOTION and self.joysticks[event.joy].get_axis(0) < -0.7):
@@ -203,8 +199,5 @@ while True:
     if game.player.health == 0:
         game.running = False
         audio.stop()
-    else:
-        pass
 
     pygame.display.update()
-    

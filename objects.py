@@ -87,6 +87,3 @@ class Ship(pygame.sprite.Sprite):
     def update(self):
         self.rect.left += self.x_speed
         self.x += self.x_speed
-
-    def shoot(self):
-        print("shoot!")
