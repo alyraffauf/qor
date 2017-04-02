@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Qor - a game inspired by Space Invaders
-# Copyright (C) 2011 Thomas Chace <ithomashc@gmail.com>
+# Copyright (C) 2014 Marilyn Chace <marilyn@marilync.co>
 
 # Qor is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
