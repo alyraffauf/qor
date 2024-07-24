@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=0.1
+Name=Qor
+Comment=A spaceship game inspired by Space Invaders
+Icon=qor
+Exec=/usr/share/qor/qor.py
+Terminal=false
+StartupNotify=false
+Categories=Game;ArcadeGame;
